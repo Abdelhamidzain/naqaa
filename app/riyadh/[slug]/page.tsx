@@ -21,11 +21,21 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return meta({ title: `${s.nameAr} بالرياض — أفضل شركة ${s.nameAr}`, description: `أفضل شركة ${s.nameAr} بالرياض. خدمة احترافية بأسعار مناسبة مع ضمان الجودة. نغطي جميع أحياء الرياض.`, path: `/riyadh/${s.slug}` });
 }
 
+const RIYADH_EXTRA: Record<string, string> = {
+  'tank-cleaning': 'يبحث كثيرون عن افضل شركة تنظيف خزانات بالرياض وشركة نظافة خزانات بالرياض وغسيل الخزانات بالرياض — ونحن نوفر كل ذلك بجودة لا تقبل المساومة. سواء كنت تحتاج غسيل خزانات المياه بالرياض أو بحثت عن افضل شركة غسيل خزانات بالرياض فستجد في نقاء الالتزام والشفافية. حتى من يكتبون شركه تنظيف خزانات بالرياض أو افضل شركه تنظيف خزانات بالرياض يصلون إلينا.',
+};
+
 export default async function RiyadhServicePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const s = SERVICES.find(x => x.slug === slug);
   if (!s) notFound();
-  const faqs = [{ q: `كم سعر ${s.nameAr} بالرياض؟`, a: `الأسعار تبدأ من ${s.priceFrom || '—'} ر.س وتختلف حسب المساحة. تواصل معنا لعرض سعر دقيق.` }, ...GLOBAL_FAQS.slice(0, 2)];
+  const vars = RIYADH_VARIANTS[slug] || [];
+  const varNote = vars.length > 0 ? ` (${vars[0]})` : '';
+  const faqs = [
+    { q: `كم سعر ${s.nameAr} بالرياض؟`, a: `الأسعار تبدأ من ${s.priceFrom || '—'} ر.س وتختلف حسب المساحة والحالة. تواصل معنا عبر الواتساب لعرض سعر دقيق.` },
+    { q: `لماذا تختار نقاء كأفضل شركة ${s.nameAr} بالرياض؟`, a: `نتميز بفريق مقيم بالرياض ومدرّب محلياً ومعدات حديثة ومواد آمنة معتمدة. نقدم ضمان رضا كامل${varNote}.` },
+    ...GLOBAL_FAQS.slice(0, 1),
+  ];
 
   return (
     <>
@@ -38,9 +48,8 @@ export default async function RiyadhServicePage({ params }: { params: Promise<{ 
           <nav className="text-sm text-white/50 mb-4"><Link href="/" className="hover:text-white/80">الرئيسية</Link> / <Link href="/riyadh" className="hover:text-white/80">الرياض</Link> / <span className="text-white/80">{s.nameAr} بالرياض</span></nav>
           <h1 className="text-3xl md:text-4xl font-bold mb-6">أفضل شركة {s.nameAr} بالرياض — خدمة احترافية بضمان كامل</h1>
           <p className="text-base text-white/75 leading-relaxed">{s.shortDesc}. نغطي جميع أحياء الرياض بفريق مقيم ومدرّب محلياً. نلتزم بالمواعيد ونقدم ضمان رضا كامل — إذا لم يعجبك أي جزء نعيد العمل مجاناً.</p>
-          {RIYADH_VARIANTS[slug] && (
-            <p className="mt-4 text-sm text-white/50 leading-relaxed">يبحث عملاؤنا أيضاً عن: {RIYADH_VARIANTS[slug].join(' · ')}</p>
-          )}
+          {RIYADH_EXTRA[slug] && <p className="mt-3 text-sm text-white/60 leading-relaxed">{RIYADH_EXTRA[slug]}</p>}
+
         </div>
       </section>
 

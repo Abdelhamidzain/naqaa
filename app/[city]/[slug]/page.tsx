@@ -46,6 +46,17 @@ export async function generateMetadata({ params }: { params: Promise<{ city: str
   return meta({ title: `${s.nameAr} ${c.preposition} — أفضل شركة ${s.nameAr}`, description: `أفضل شركة ${s.nameAr} ${c.preposition}. خدمة احترافية بأسعار مناسبة مع ضمان جودة. احجز الآن!`, path: `/${c.slug}/${s.slug}` });
 }
 
+const CITY_EXTRA: Record<string, string> = {
+  'jeddah/sofa-cleaning': 'نوفر أيضاً خدمة شركة تنظيف بالبخار بجدة وشركة تنظيف كنب بالبخار بجدة بتقنيات حديثة تناسب جميع أنواع الأقمشة.',
+  'jeddah/tank-cleaning': 'عملاؤنا الذين بحثوا عن افضل شركه تنظيف خزانات بجده وجدوا في نقاء الجودة والشفافية التي يبحثون عنها.',
+  'dammam/tank-cleaning': 'نحن افضل شركة تنظيف خزانات بالدمام وشركة غسيل خزانات بالدمام — نعتمد بروتوكولات تعقيم صارمة ومعتمدة صحياً.',
+  'madinah/tank-cleaning': 'متوفرة أيضاً لمن يبحث عن تنظيف بالمدينه المنوره أو غسيل خزانات بالمدينه — فريقنا المحلي جاهز لخدمتك.',
+  'madinah/sofa-cleaning': 'خدمة شركه تنظيف خزانات بالمدينة المنورة متاحة أيضاً ضمن باقاتنا الشاملة.',
+  'khobar/tank-cleaning': 'يبحث عملاؤنا أيضاً عن شركه تنظيف خزانات بالخبر — ونحن نقدم نفس الجودة في جميع المناطق.',
+  'qatif/tank-cleaning': 'متاحة أيضاً لمن يبحث عن شركه تنظيف خزانات بالقطيف — نغطي القطيف وتاروت وسنابس.',
+  'ahsa/house-cleaning': 'نخدم أيضاً من يبحث عن شركة تنظيف المنازل بالاحساء أو شركه تنظيف بالاحساء بنفس الجودة والالتزام.',
+};
+
 export default async function CityServicePage({ params }: { params: Promise<{ city: string; slug: string }> }) {
   const { city: citySlug, slug } = await params;
   const c = CITIES.find(x => x.slug === citySlug && x.isLaunched);
@@ -54,7 +65,12 @@ export default async function CityServicePage({ params }: { params: Promise<{ ci
 
   const key = `${citySlug}/${slug}`;
   const variants = VARIANTS[key] || [];
-  const faqs = [{ q: `كم سعر ${s.nameAr} ${c.preposition}؟`, a: `الأسعار تبدأ من ${s.priceFrom || '—'} ر.س. تواصل معنا لعرض سعر دقيق.` }, ...GLOBAL_FAQS.slice(0, 2)];
+  const variantNote = variants.length > 0 ? ` (${variants[0]})` : '';
+  const faqs = [
+    { q: `كم سعر ${s.nameAr} ${c.preposition}؟`, a: `الأسعار تبدأ من ${s.priceFrom || '—'} ر.س وتختلف حسب المساحة والحالة. تواصل معنا عبر الواتساب لعرض سعر دقيق ومخصص.` },
+    { q: `لماذا تختار نقاء كأفضل شركة ${s.nameAr} ${c.preposition}؟`, a: `نتميز بفريق مدرّب محلياً ومعدات حديثة ومواد آمنة معتمدة. نقدم ضمان رضا كامل مع إعادة العمل مجاناً إذا لم يعجبك أي جزء${variantNote}.` },
+    ...GLOBAL_FAQS.slice(0, 1),
+  ];
 
   return (
     <>
@@ -73,13 +89,11 @@ export default async function CityServicePage({ params }: { params: Promise<{ ci
           <p className="text-base text-white/75 leading-relaxed">
             نقدم خدمة {s.nameAr} بأعلى مستويات الجودة في {c.nameAr} وضواحيها.
             فريقنا مدرّب على أحدث المعدات والتقنيات ويستخدم مواد آمنة ومعتمدة.
-            نلتزم بالمواعيد ونقدم ضمان رضا كامل لجميع عملائنا. {s.shortDesc}.
+            نلتزم بالمواعيد ونقدم ضمان رضا كامل لجميع عملائنا. {s.shortDesc}.</p>
+          {CITY_EXTRA[key] && <p className="mt-3 text-sm text-white/60 leading-relaxed">{CITY_EXTRA[key]}</p>}
+          <p className="text-base text-white/75 leading-relaxed">
           </p>
-          {variants.length > 0 && (
-            <p className="mt-4 text-sm text-white/50 leading-relaxed">
-              يبحث عملاؤنا أيضاً عن: {variants.join(' · ')}
-            </p>
-          )}
+
         </div>
       </section>
 
