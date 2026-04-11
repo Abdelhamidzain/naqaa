@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #0C4A3E;
+  --primary-light: #1A6B5A;
+  --primary-dark: #083328;
+  --accent: #C8A95E;
+  --surface: #FAFAF8;
+  --surface-alt: #F2F0EC;
+  --text: #1A1A1A;
+  --muted: #6B6B6B;
+  --border: #E5E2DC;
+  --whatsapp: #25D366;
+}
+
+@layer base {
+  body {
+    font-family: 'IBM Plex Sans Arabic', 'Segoe UI', Tahoma, sans-serif;
+    color: var(--text);
+    background: var(--surface);
+  }
+}
+
+@layer components {
+  .container-page { @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8; }
+  .section-spacing { @apply py-16 md:py-24; }
+  .btn-wa { @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-white transition-all; background: var(--whatsapp); }
+  .btn-wa:hover { background: #20BD5A; transform: translateY(-1px); }
+  .btn-primary { @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-white transition-all; background: var(--primary); }
+  .btn-primary:hover { background: var(--primary-light); }
+  .card { @apply bg-white rounded-2xl p-6 border transition-shadow; border-color: var(--border); }
+  .card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.08); }
+}
